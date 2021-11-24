@@ -4,28 +4,43 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NeuroneToCsv"
-        mc:Ignorable="d" Loaded="Window_Loaded"
+        mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button x:Name="Bt_Ecoute" Content="Ecoute" HorizontalAlignment="Left" Height="28" Margin="42,200,0,0" VerticalAlignment="Top" Width="129" Click="Bt_Ecoute_Click"/>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="126" Margin="42,10,0,0" VerticalAlignment="Top" Width="351">
+        <Button x:Name="Bt_Ecoute" Content="Ecoute" HorizontalAlignment="Left" Height="28" Margin="42,75,0,0" VerticalAlignment="Top" Width="129" Click="Bt_Ecoute_Click"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="60" Margin="42,10,0,0" VerticalAlignment="Top" Width="351">
             <StackPanel Width="177" >
-                <Label></Label>
+                <Label Height="20" Padding="0">Adresse d'écoute</Label>
+                <Label Height="20" Padding="0">Adresse Carte réseau</Label>
+                <Label Height="20" Padding="0">Numéro de Port</Label>
             </StackPanel>
-            <StackPanel Width="177" >           
-                <TextBox></TextBox>
+            <StackPanel Width="171" >
+                <TextBox Text="{Binding Path=AdresseEcoute}"></TextBox>
+                <TextBox Text="{Binding Path=AdresseCarte}"></TextBox>
+                <TextBox Text="{Binding Path=Port_Ecoute}"></TextBox>
             </StackPanel>
         </StackPanel>
-        <StackPanel x:Name="InfosNeurons" HorizontalAlignment="Left" Height="175" Margin="259,200,0,0" VerticalAlignment="Top" Width="120">
-            <Label></Label>
-            <Label></Label>
-            <Label></Label>
-            <Label></Label>
-            <Label></Label>
-            <Label></Label>
-            <Label></Label>
-            <Label></Label>
-            <Label></Label>
+        <StackPanel x:Name="InfosNeurons" HorizontalAlignment="Left" Height="175" Margin="251,151,0,0" VerticalAlignment="Top" Width="120">
+            <Label Padding="0"></Label>
+            <Label Padding="0"></Label>
+            <Label Padding="0"></Label>
+            <Label Padding="0"></Label>
+            <Label Padding="0"></Label>
+            <Label Padding="0"></Label>
+            <Label Padding="0"></Label>
+            <Label Padding="0"></Label>
+            <Label Padding="0"></Label>
+        </StackPanel>
+        <StackPanel x:Name="ValNeurons" HorizontalAlignment="Left" Height="175" Margin="371,151,0,0" VerticalAlignment="Top" Width="120">
+            <Label Padding="0" Content="{Binding ValLatitude}"/>
+            <Label Padding="0" Content="{Binding ValLongitude}"/>
+            <Label Padding="0" Content="{Binding ValAltitude}"/>
+            <Label Padding="0" Content="{Binding ValHeading}"/>
+            <Label Padding="0" Content="{Binding ValVh}"/>
+            <Label Padding="0" Content="{Binding ValVz}"/>
+            <Label Padding="0"/>
+            <Label Padding="0"/>
+            <Label Padding="0"/>
         </StackPanel>
 
     </Grid>

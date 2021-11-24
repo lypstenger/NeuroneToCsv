@@ -69,6 +69,7 @@ namespace NeuroneToCsv
                 Mon_ecoute = new Client_UDP();
                 Mon_ecoute.Interface_Address = conf.AdresseCarte;
                 Mon_ecoute.IPConnexion = IPAddress.Parse(conf.AdresseEcoute);
+                //Mon_ecoute.IPConnexion = IPAddress.Parse("127.0.0.1");
                 Mon_ecoute.Port = conf.Port_Ecoute;
                 Mon_ecoute.UDP_DataRecues += monlecteur_UDP_DataRecues;
                 Mon_ecoute.UDP_Acquisition();
@@ -93,11 +94,13 @@ namespace NeuroneToCsv
             {
 
                 CurrentNeurons = new Neurons(data);
-                this.Dispatcher.BeginInvoke(new Action(delegate
+                if (CurrentNeurons.Etat)
                 {
-                    affich_reception(CurrentNeurons);
-                }));
-
+                    this.Dispatcher.BeginInvoke(new Action(delegate
+                    {
+                        affich_reception(CurrentNeurons);
+                    }));
+                }
 
             }
             catch { }
@@ -105,7 +108,27 @@ namespace NeuroneToCsv
 
         private void affich_reception(Neurons currentNeurons)
         {
+   
             Lbinfosneurons[0].Content = currentNeurons.serialNumber;
+            Lbinfosneurons[1].Content = currentNeurons.Seconde;
+            Lbinfosneurons[2].Content = currentNeurons.Gps_Fix;
+            Lbinfosneurons[3].Content = currentNeurons.Latitude;
+            Lbinfosneurons[4].Content = currentNeurons.Longitude;
+            Lbinfosneurons[5].Content = currentNeurons.Altitude;
+            Lbinfosneurons[6].Content = currentNeurons.Heading;
+            Lbinfosneurons[7].Content = currentNeurons.Vh;
+            Lbinfosneurons[8].Content = currentNeurons.Vz;
+
+            //ValNeurons.DataContext = null;
+            ValNeurons.DataContext = currentNeurons;
+         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (Mon_ecoute!=null)
+            {
+                Mon_ecoute.UDP_StopServer();
+            }
         }
     }
 }

@@ -8,9 +8,9 @@ namespace NeuroneToCsv
 {
   public  class Configuration
     {
-        public string AdresseEcoute { get; set; } = "225.0.0.1";
+        public string AdresseEcoute { get; set; } = "192.168.1.1";
         public int Port_Ecoute { get; set; } = 1983;
-        public string AdresseCarte { get; set; } = "192.168.1.63";
+        public string AdresseCarte { get; set; } = "192.168.1.1";
 
 
         public Configuration() { }
