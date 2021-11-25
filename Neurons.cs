@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace NeuroneToCsv
         {
             get
             {
-                return Convert.ToDouble(Latitude) / 10000;
+                return Convert.ToDouble(Latitude) / 100000;
             }
         }
         public string Longitude { get; set; }
@@ -41,7 +42,7 @@ namespace NeuroneToCsv
         {
             get
             {
-                return Convert.ToDouble(Longitude) / 10000;
+                return Convert.ToDouble(Longitude) / 100000;
             }
         }
         public string Altitude { get; set; }
@@ -62,7 +63,7 @@ namespace NeuroneToCsv
                 return Convert.ToInt32(Heading);
             }
         }
-
+        public int ValHeadingPrec { get; set; }
         public string Vh { get; set; }
         public double ValVh
 
@@ -83,6 +84,61 @@ namespace NeuroneToCsv
         }
         public bool Etat { get; set; } = false;
 
+        public double Temps1 { get; set; } = 0;
+        public double Temps0 { get; set; } = 0;
+        public double Pos_cap { get; set; } = 0;
+        public double Pos_cap0 { get; set; } = 0;
+
+        public double Delai { get; set; } = 0;
+
+
+
+
+
+
+        public double CalRoulis(double omega, double vitesse, double g)
+        {
+
+            stopWatch.Stop();
+           Delai = stopWatch.ElapsedMilliseconds;
+
+            double Vomega = 1000 / Delai;
+            if ((Pos_cap - Pos_cap0) > 170)
+            {
+                Pos_cap0 = Pos_cap;
+            }
+            if ((Pos_cap0 - Pos_cap) > 170)
+            {
+                Pos_cap0 = Pos_cap;
+            }
+
+
+            omega = ((float)((Pos_cap - Pos_cap0)));
+
+
+
+             omega = omega*Vomega * Math.PI / 180f;
+
+
+            double tge = vitesse * omega / g;
+
+
+            double retour = Math.Atan(tge) * 180f / Math.PI;
+
+            Pos_cap0 = Pos_cap;
+            stopWatch.Restart();
+            return retour;
+
+        }
+
+        private  Stopwatch stopWatch = new Stopwatch();
+
+        public void startCptTemps()
+        {
+            stopWatch.Start();
+   
+        }
+
         public void dcomm(byte[] data)
         {
             string s = "";
@@ -96,7 +152,7 @@ namespace NeuroneToCsv
   
             try
             {
-                string[] Tabinfos = s.Split(new string[] { "," }, StringSplitOptions.None);
+                string[] Tabinfos = s.Split(new string[] { ",","\r\n" }, StringSplitOptions.None);
                 serialNumber = Tabinfos[1];
                 Seconde = Tabinfos[2];
                 Gps_Fix = Tabinfos[3];

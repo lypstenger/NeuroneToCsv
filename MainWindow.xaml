@@ -7,14 +7,14 @@
         mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button x:Name="Bt_Ecoute" Content="Ecoute" HorizontalAlignment="Left" Height="28" Margin="42,75,0,0" VerticalAlignment="Top" Width="129" Click="Bt_Ecoute_Click"/>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="60" Margin="42,10,0,0" VerticalAlignment="Top" Width="351">
+        <Button x:Name="Bt_Ecoute" Content="Ecoute" HorizontalAlignment="Left" Height="28" Margin="42,94,0,0" VerticalAlignment="Top" Width="129" Click="Bt_Ecoute_Click"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="79" Margin="42,10,0,0" VerticalAlignment="Top" Width="351">
             <StackPanel Width="177" >
                 <Label Height="20" Padding="0">Adresse d'écoute</Label>
                 <Label Height="20" Padding="0">Adresse Carte réseau</Label>
                 <Label Height="20" Padding="0">Numéro de Port</Label>
             </StackPanel>
-            <StackPanel Width="171" >
+            <StackPanel Width="171" Margin="0,0,0,0" >
                 <TextBox Text="{Binding Path=AdresseEcoute}"></TextBox>
                 <TextBox Text="{Binding Path=AdresseCarte}"></TextBox>
                 <TextBox Text="{Binding Path=Port_Ecoute}"></TextBox>
@@ -42,6 +42,7 @@
             <Label Padding="0"/>
             <Label Padding="0"/>
         </StackPanel>
+        <Label x:Name="debug" Content="Label" HorizontalAlignment="Left" Height="210" Margin="546,10,0,0" VerticalAlignment="Top" Width="213"/>
 
     </Grid>
 </Window>

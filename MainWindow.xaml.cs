@@ -106,6 +106,9 @@ namespace NeuroneToCsv
             catch { }
         }
 
+
+        List<Neurons> lesNeurons = new List<Neurons>();
+        int indexRecept = 0;
         private void affich_reception(Neurons currentNeurons)
         {
    
@@ -119,8 +122,45 @@ namespace NeuroneToCsv
             Lbinfosneurons[7].Content = currentNeurons.Vh;
             Lbinfosneurons[8].Content = currentNeurons.Vz;
 
+            List<Neurons> tmp = (from n in lesNeurons
+                                 where n.serialNumber == currentNeurons.serialNumber
+                                 select n).ToList();
+
+            if (tmp.Count>0)
+            {
+
+             if (tmp[0].serialNumber != "10") { return; }
+  
+            double roulis=    tmp[0].CalRoulis(0, currentNeurons.ValVh, 9.81);
+
+                 debug.Content = tmp[0].Delai.ToString()+"    "+roulis.ToString() ;
+                //calcul roulis 
+                //envoi do
+            }
+
+            if (tmp.Count == 0)
+            {
+
+                currentNeurons.ValHeadingPrec = currentNeurons.ValHeading;
+                currentNeurons.startCptTemps();
+                lesNeurons.Add(currentNeurons);
+
+               // ajoute neurons 
+               //roulis=0
+               //envoi do
+            }
+
+
+
+     
+
+
             //ValNeurons.DataContext = null;
             ValNeurons.DataContext = currentNeurons;
+
+
+
+
          }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
