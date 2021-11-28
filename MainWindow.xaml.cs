@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -28,6 +29,7 @@ namespace NeuroneToCsv
         {
             InitializeComponent();
         }
+        UdpClient EnvoiViewmap3D = null;
 
         Configuration conf;
         private void ouvreconf()
@@ -59,7 +61,8 @@ namespace NeuroneToCsv
                 sauveconfig();
             }
             Lbinfosneurons= InfosNeurons.Children.OfType<Label>().ToList();
-   
+            EnvoiViewmap3D = new UdpClient(conf.AdresseViewmap3D, conf.PortViewmap3D);
+
         }
 
         private void Bt_Ecoute_Click(object sender, RoutedEventArgs e)
@@ -69,7 +72,6 @@ namespace NeuroneToCsv
                 Mon_ecoute = new Client_UDP();
                 Mon_ecoute.Interface_Address = conf.AdresseCarte;
                 Mon_ecoute.IPConnexion = IPAddress.Parse(conf.AdresseEcoute);
-                //Mon_ecoute.IPConnexion = IPAddress.Parse("127.0.0.1");
                 Mon_ecoute.Port = conf.Port_Ecoute;
                 Mon_ecoute.UDP_DataRecues += monlecteur_UDP_DataRecues;
                 Mon_ecoute.UDP_Acquisition();
@@ -106,7 +108,7 @@ namespace NeuroneToCsv
             catch { }
         }
 
-
+        string le_currentSerial = "1101";
         List<Neurons> lesNeurons = new List<Neurons>();
         int indexRecept = 0;
         private void affich_reception(Neurons currentNeurons)
@@ -126,41 +128,42 @@ namespace NeuroneToCsv
                                  where n.serialNumber == currentNeurons.serialNumber
                                  select n).ToList();
 
-            if (tmp.Count>0)
+            if (tmp.Count > 0)
             {
+                  tmp[0].Seconde = currentNeurons.Seconde;
+                tmp[0].Gps_Fix = currentNeurons.Gps_Fix;
+                tmp[0].Latitude = currentNeurons.Latitude;
+                tmp[0].Longitude = currentNeurons.Longitude;
+                tmp[0].Altitude = currentNeurons.Altitude;
+                tmp[0].Heading = currentNeurons.Heading;
+                tmp[0].Vh = currentNeurons.Vh;
+                tmp[0].Vz = currentNeurons.Vz;
 
-             if (tmp[0].serialNumber != "10") { return; }
-  
-            double roulis=    tmp[0].CalRoulis(0, currentNeurons.ValVh, 9.81);
+                if (currentNeurons.serialNumber != le_currentSerial) { return; }
 
-                 debug.Content = tmp[0].Delai.ToString()+"    "+roulis.ToString() ;
-                //calcul roulis 
-                //envoi do
+                double teste = tmp[0].CalRoulis(tmp[0].ValVh, 9.81);
+
+                debug.Content = tmp[0].Delai.ToString();
+
+
+                string chaine = tmp[0].CreateCmdViewmap3D((bool)rb1.IsChecked);
+                byte[] chainebyte = Encoding.UTF8.GetBytes(chaine);
+                EnvoiViewmap3D.Send(chainebyte, chainebyte.Length); 
             }
-
             if (tmp.Count == 0)
             {
 
                 currentNeurons.ValHeadingPrec = currentNeurons.ValHeading;
                 currentNeurons.startCptTemps();
                 lesNeurons.Add(currentNeurons);
+                Lbneurons.ItemsSource = null;
+                Lbneurons.ItemsSource = lesNeurons;
 
                // ajoute neurons 
                //roulis=0
                //envoi do
             }
-
-
-
-     
-
-
-            //ValNeurons.DataContext = null;
             ValNeurons.DataContext = currentNeurons;
-
-
-
-
          }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -169,6 +172,13 @@ namespace NeuroneToCsv
             {
                 Mon_ecoute.UDP_StopServer();
             }
+            sauveconfig();
+        }
+
+        private void Lbneurons_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            le_currentSerial = ((Neurons)(Lbneurons.SelectedItem)).serialNumber;
+           // le_currentSerial=
         }
     }
 }

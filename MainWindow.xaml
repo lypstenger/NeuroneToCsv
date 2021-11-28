@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:NeuroneToCsv"
+        xmlns:local="clr-namespace:NeuroneToCsv" Style="{DynamicResource CustomWindowStyle}"
         mc:Ignorable="d" Loaded="Window_Loaded" Closing="Window_Closing"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="558.271" Width="800">
     <Grid>
         <Button x:Name="Bt_Ecoute" Content="Ecoute" HorizontalAlignment="Left" Height="28" Margin="42,94,0,0" VerticalAlignment="Top" Width="129" Click="Bt_Ecoute_Click"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="79" Margin="42,10,0,0" VerticalAlignment="Top" Width="351">
@@ -42,7 +42,10 @@
             <Label Padding="0"/>
             <Label Padding="0"/>
         </StackPanel>
-        <Label x:Name="debug" Content="Label" HorizontalAlignment="Left" Height="210" Margin="546,10,0,0" VerticalAlignment="Top" Width="213"/>
-
+        <Label x:Name="debug" Content="Label" HorizontalAlignment="Left" Height="29" Margin="673,10,0,0" VerticalAlignment="Top" Width="86"/>
+        <ListBox x:Name="Lbneurons" HorizontalAlignment="Left" Height="334" Margin="10,151,0,0" VerticalAlignment="Top" Width="206" MouseLeftButtonUp="Lbneurons_MouseLeftButtonUp"/>
+        <RadioButton x:Name="rb1" Content="Para" HorizontalAlignment="Left" Height="29" Margin="514,10,0,0" VerticalAlignment="Top" Width="127" IsChecked="True"/>
+        <RadioButton x:Name="rb2" Content="Helice" HorizontalAlignment="Left" Height="29" Margin="514,39,0,0" VerticalAlignment="Top" Width="127"/>
+ 
     </Grid>
 </Window>

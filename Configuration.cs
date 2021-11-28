@@ -12,6 +12,8 @@ namespace NeuroneToCsv
         public int Port_Ecoute { get; set; } = 1983;
         public string AdresseCarte { get; set; } = "192.168.1.1";
 
+        public string AdresseViewmap3D { get; set; } = "127.0.0.1";
+        public int PortViewmap3D { get; set; } = 2024;
 
         public Configuration() { }
     }

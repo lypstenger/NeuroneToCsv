@@ -84,36 +84,45 @@ namespace NeuroneToCsv
         }
         public bool Etat { get; set; } = false;
 
+        // AviMOBPARAS   AviMOBPC7  HelMOB1
+        public string ChxMobile { get; set; } = "AviMOBPARAS";
         public double Temps1 { get; set; } = 0;
         public double Temps0 { get; set; } = 0;
-        public double Pos_cap { get; set; } = 0;
-        public double Pos_cap0 { get; set; } = 0;
-
+  
         public double Delai { get; set; } = 0;
 
+        public double Roulis { get; set; } = 0;
+        public double Pitch { get; set; } = 0;
 
+        public string CreateCmdViewmap3D(bool paras)
+        {
+            if (paras) { ChxMobile = "AviMOBPARAS"; }else { ChxMobile = "AviMOBPC7"; }
+            string cmd = ChxMobile + ";" + ValLatitude.ToString("0.000000") + ";" + ValLongitude.ToString("0.000000") + ";" + ValAltitude.ToString("0.00") + ";" + ValHeading.ToString("0.0") + ";" + Roulis.ToString("00.000") + ";" + Pitch;
+            return cmd;
+        }
+        public override string ToString()
+        {
+            return serialNumber +" = "+ (ValVh*3.6).ToString("0.0") ;
+        }
 
-
-
-
-        public double CalRoulis(double omega, double vitesse, double g)
+        public double CalRoulis(  double vitesse, double g)
         {
 
             stopWatch.Stop();
            Delai = stopWatch.ElapsedMilliseconds;
 
             double Vomega = 1000 / Delai;
-            if ((Pos_cap - Pos_cap0) > 170)
+            if ((ValHeading - ValHeadingPrec) > 170)
             {
-                Pos_cap0 = Pos_cap;
+                ValHeadingPrec = ValHeading;
             }
-            if ((Pos_cap0 - Pos_cap) > 170)
+            if ((ValHeadingPrec - ValHeading) > 170)
             {
-                Pos_cap0 = Pos_cap;
+                ValHeadingPrec = ValHeading;
             }
 
 
-            omega = ((float)((Pos_cap - Pos_cap0)));
+            double omega = ((float)((ValHeading - ValHeadingPrec)));
 
 
 
@@ -123,11 +132,14 @@ namespace NeuroneToCsv
             double tge = vitesse * omega / g;
 
 
-            double retour = Math.Atan(tge) * 180f / Math.PI;
+            Roulis = Math.Atan(tge) * 180f / Math.PI;
 
-            Pos_cap0 = Pos_cap;
+
+            Pitch = Math.Atan(ValVz / ValVh) * 180f / Math.PI;
+
+            ValHeadingPrec = ValHeading;
             stopWatch.Restart();
-            return retour;
+            return Roulis;
 
         }
 

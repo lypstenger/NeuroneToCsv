@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <AdresseEcoute>239.168.1.1</AdresseEcoute>
+  <Port_Ecoute>1983</Port_Ecoute>
+  <AdresseCarte>192.168.1.79</AdresseCarte>
+  <AdresseViewmap3D>127.0.0.1</AdresseViewmap3D>
+  <PortViewmap3D>2024</PortViewmap3D>
+</Configuration>
