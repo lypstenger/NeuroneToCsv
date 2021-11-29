@@ -10,11 +10,13 @@ namespace NeuroneToCsv
 {
    public class Neurons : INotifyPropertyChanged
     {
-        public Neurons() { }
+        public Neurons()
+        {
+               }
         public Neurons(byte[]data) {
 
             dcomm(data);
-        }
+         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotifyPropertyChanged(string propertyName)
         {
