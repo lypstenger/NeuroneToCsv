@@ -14,6 +14,8 @@ namespace NeuroneToCsv
 
         public string AdresseViewmap3D { get; set; } = "127.0.0.1";
         public int PortViewmap3D { get; set; } = 2024;
+        public string AdresseViewmap { get; set; } = "127.0.0.1";
+        public int PortViewmap { get; set; } = 2021;
 
         public Configuration() { }
     }

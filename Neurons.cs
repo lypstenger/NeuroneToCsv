@@ -93,18 +93,42 @@ namespace NeuroneToCsv
   
         public double Delai { get; set; } = 0;
 
+        public string Type { get; set; } = "Parachute";
+        //pour viewmap3d
+        public string nomMobile { get; set; }
+        public string nom_camera { get; set; }
         public double Roulis { get; set; } = 0;
         public double Pitch { get; set; } = 0;
 
         public string CreateCmdViewmap3D(bool paras)
         {
             if (paras) { ChxMobile = "AviMOBPARAS"; }else { ChxMobile = "AviMOBPC7"; }
+
             string cmd = ChxMobile + ";" + ValLatitude.ToString("0.000000") + ";" + ValLongitude.ToString("0.000000") + ";" + ValAltitude.ToString("0.00") + ";" + ValHeading.ToString("0.0") + ";" + Roulis.ToString("00.000") + ";" + Pitch;
             return cmd;
         }
+        public byte[] CreateCmdViewmap()
+        {
+                 byte[] env = new byte[64];
+            //byte[] dfdfd = Encoding.Unicode.GetBytes("kcvbxcbdfwvbwb∑t∑€@t");s
+            string st = nomMobile;
+                if (st.Length>8)
+            {  st = nomMobile.Substring(nomMobile.Length - 8, 8); }
+            while (st.Length < 8)
+            {
+                st = " "+st;
+            }
+                Buffer.BlockCopy(Encoding.ASCII.GetBytes(st), 0, env, 0, 8);
+                Buffer.BlockCopy(BitConverter.GetBytes(ValLatitude), 0, env, 16, 8);
+                Buffer.BlockCopy(BitConverter.GetBytes(ValLongitude), 0, env, 24, 8);
+                Buffer.BlockCopy(BitConverter.GetBytes(ValAltitude), 0, env, 32, 8);
+   
+
+            return env;
+            }
         public override string ToString()
         {
-            return serialNumber +" = "+ (ValVh*3.6).ToString("0.0") ;
+            return serialNumber +" Type= "+Type;
         }
 
         public double CalRoulis(  double vitesse, double g)

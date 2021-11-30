@@ -44,8 +44,6 @@
         </StackPanel>
         <Label x:Name="debug" Content="Label" HorizontalAlignment="Left" Height="29" Margin="673,10,0,0" VerticalAlignment="Top" Width="86"/>
         <ListBox x:Name="Lbneurons" HorizontalAlignment="Left" Height="334" Margin="10,151,0,0" VerticalAlignment="Top" Width="206" MouseLeftButtonUp="Lbneurons_MouseLeftButtonUp"/>
-        <RadioButton x:Name="rb1" Content="Para" HorizontalAlignment="Left" Height="29" Margin="514,10,0,0" VerticalAlignment="Top" Width="127" IsChecked="True"/>
-        <RadioButton x:Name="rb2" Content="Helice" HorizontalAlignment="Left" Height="29" Margin="514,39,0,0" VerticalAlignment="Top" Width="127"/>
- 
+
     </Grid>
 </Window>

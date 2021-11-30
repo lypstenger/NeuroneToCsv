@@ -30,6 +30,7 @@ namespace NeuroneToCsv
             InitializeComponent();
         }
         UdpClient EnvoiViewmap3D = null;
+        UdpClient EnvoiViewmap = null;
 
         Configuration conf;
         private void ouvreconf()
@@ -62,6 +63,7 @@ namespace NeuroneToCsv
             }
             Lbinfosneurons= InfosNeurons.Children.OfType<Label>().ToList();
             EnvoiViewmap3D = new UdpClient(conf.AdresseViewmap3D, conf.PortViewmap3D);
+            EnvoiViewmap = new UdpClient(conf.AdresseViewmap, conf.PortViewmap);
 
         }
 
@@ -130,7 +132,7 @@ namespace NeuroneToCsv
 
             if (tmp.Count > 0)
             {
-                  tmp[0].Seconde = currentNeurons.Seconde;
+                tmp[0].Seconde = currentNeurons.Seconde;
                 tmp[0].Gps_Fix = currentNeurons.Gps_Fix;
                 tmp[0].Latitude = currentNeurons.Latitude;
                 tmp[0].Longitude = currentNeurons.Longitude;
@@ -139,29 +141,57 @@ namespace NeuroneToCsv
                 tmp[0].Vh = currentNeurons.Vh;
                 tmp[0].Vz = currentNeurons.Vz;
 
-                if (currentNeurons.serialNumber != le_currentSerial) { return; }
+                //if (currentNeurons.serialNumber != le_currentSerial) { return; }
 
                 double teste = tmp[0].CalRoulis(tmp[0].ValVh, 9.81);
 
                 debug.Content = tmp[0].Delai.ToString();
 
 
-                string chaine = tmp[0].CreateCmdViewmap3D((bool)rb1.IsChecked);
+                string chaine = tmp[0].CreateCmdViewmap3D(true);
+
+                chaine = chaine.Replace("AviMOBPARAS", "Dup_"+ tmp[0].nomMobile );
                 byte[] chainebyte = Encoding.UTF8.GetBytes(chaine);
-                EnvoiViewmap3D.Send(chainebyte, chainebyte.Length); 
+                EnvoiViewmap3D.Send(chainebyte, chainebyte.Length);
+                EnvoiViewmap.Send(tmp[0].CreateCmdViewmap(), 64);
+
+
+
             }
             if (tmp.Count == 0)
             {
-
+              //if  (currentNeurons.serialNumber != "1"){ return; }
                 currentNeurons.ValHeadingPrec = currentNeurons.ValHeading;
+                if (currentNeurons.serialNumber == "1" || currentNeurons.serialNumber == "5" ||
+                    currentNeurons.serialNumber == "10" || currentNeurons.serialNumber == "15" || currentNeurons.serialNumber == "15")
+                { currentNeurons.Type = "pc7"; }
+                if (currentNeurons.serialNumber == "31" || currentNeurons.serialNumber == "25" ||
+                              currentNeurons.serialNumber == "20" )
+                { currentNeurons.Type = "Tigre1"; }
                 currentNeurons.startCptTemps();
+              
+                currentNeurons.nomMobile = currentNeurons.Type+"_ID" + currentNeurons.serialNumber;
+                currentNeurons.nom_camera =  "Camera_"+ currentNeurons.Type+"_ID" + currentNeurons.serialNumber;
                 lesNeurons.Add(currentNeurons);
+                
+                string duplicate = "DUPLICATE;C"+currentNeurons.Type+";ID" + currentNeurons.serialNumber;
+                byte[] chainebyte = Encoding.UTF8.GetBytes(duplicate);
+                EnvoiViewmap3D.Send(chainebyte, chainebyte.Length);
+
+
+               
+                string chaine = currentNeurons.CreateCmdViewmap3D(true);
+                chaine = chaine.Replace("AviMOBPARAS", "Dup_" + currentNeurons.nomMobile );
+                chainebyte = Encoding.UTF8.GetBytes(chaine);
+                EnvoiViewmap3D.Send(chainebyte, chainebyte.Length);
+          
+
+
                 Lbneurons.ItemsSource = null;
                 Lbneurons.ItemsSource = lesNeurons;
-
                // ajoute neurons 
-               //roulis=0
-               //envoi do
+                //roulis=0
+                //envoi do
             }
             ValNeurons.DataContext = currentNeurons;
          }
@@ -177,8 +207,12 @@ namespace NeuroneToCsv
 
         private void Lbneurons_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            le_currentSerial = ((Neurons)(Lbneurons.SelectedItem)).serialNumber;
-           // le_currentSerial=
+          //  le_currentSerial = ((Neurons)(Lbneurons.SelectedItem)).serialNumber;
+            string chaine = "CAMS;" + ((Neurons)(Lbneurons.SelectedItem)).nom_camera;
+            byte[]  chainebyte = Encoding.UTF8.GetBytes(chaine);
+            EnvoiViewmap3D.Send(chainebyte, chainebyte.Length);
+
+            // le_currentSerial=
         }
     }
 }
