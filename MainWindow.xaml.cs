@@ -52,6 +52,9 @@ namespace NeuroneToCsv
         List<Label> Lbinfosneurons = null;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+
+
+          
             if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "ConFNeurons.xml"))
             {
                 ouvreconf();
@@ -207,7 +210,8 @@ namespace NeuroneToCsv
 
         private void Lbneurons_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-          //  le_currentSerial = ((Neurons)(Lbneurons.SelectedItem)).serialNumber;
+             //  le_currentSerial = ((Neurons)(Lbneurons.SelectedItem)).serialNumber;
+            if (Lbneurons.SelectedItem == null) { return; }
             string chaine = "CAMS;" + ((Neurons)(Lbneurons.SelectedItem)).nom_camera;
             byte[]  chainebyte = Encoding.UTF8.GetBytes(chaine);
             EnvoiViewmap3D.Send(chainebyte, chainebyte.Length);
