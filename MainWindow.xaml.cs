@@ -65,7 +65,28 @@ namespace NeuroneToCsv
                 sauveconfig();
             }
             Lbinfosneurons= InfosNeurons.Children.OfType<Label>().ToList();
-            EnvoiViewmap3D = new UdpClient(conf.AdresseViewmap3D, conf.PortViewmap3D);
+
+            string ctrlmulticast = conf.AdresseViewmap3D.Split(new string[] { "." }, StringSplitOptions.None)[0];
+            if (Convert.ToInt32(ctrlmulticast) > 223 && Convert.ToInt32(ctrlmulticast) < 240)
+            {
+                //EnvoiViewmap3D.Close();
+                EnvoiViewmap3D = new UdpClient();
+                EnvoiViewmap3D.ExclusiveAddressUse = false;
+
+                MulticastOption moption = new MulticastOption(IPAddress.Parse(conf.AdresseViewmap3D), IPAddress.Parse(conf.IpInterface));
+                EnvoiViewmap3D.Client.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership, moption);
+                EnvoiViewmap3D.Connect(conf.AdresseViewmap3D, conf.PortViewmap3D);
+            }
+            if (Convert.ToInt32(ctrlmulticast) < 224)
+            {
+                EnvoiViewmap3D.Close();
+                EnvoiViewmap3D = new UdpClient(conf.AdresseViewmap3D, conf.PortViewmap3D);
+
+            }
+
+
+
+          
             EnvoiViewmap = new UdpClient(conf.AdresseViewmap, conf.PortViewmap);
 
         }
