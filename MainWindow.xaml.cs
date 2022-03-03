@@ -79,7 +79,7 @@ namespace NeuroneToCsv
             }
             if (Convert.ToInt32(ctrlmulticast) < 224)
             {
-                EnvoiViewmap3D.Close();
+                //EnvoiViewmap3D.Close();
                 EnvoiViewmap3D = new UdpClient(conf.AdresseViewmap3D, conf.PortViewmap3D);
 
             }
